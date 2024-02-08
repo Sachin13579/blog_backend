@@ -74,7 +74,7 @@ const fetchBlog = async (params) => {
             { $count: "pageCount" }
         ])
         const resp = {};
-        resp.pageCount = pageCount[0].pageCount;
+        resp.pageCount = pageCount[0]?.pageCount?pageCount[0]?.pageCount:0;
         resp.feedData = fetchData
         return { status: true, data: resp, message: "blog fetched successfully!" }
     } catch (error) {
@@ -104,7 +104,7 @@ const fetchBlogTags = async (data) => {
             }
         ])
 
-        
+
         return { status: true, data: fetchData, message: "tags fetched successfully!" }
     } catch (error) {
         return { status: false, message: error.message }
