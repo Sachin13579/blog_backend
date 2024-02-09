@@ -49,7 +49,7 @@ let userMediaUpload = function (req, res, next) {
     }
     ])(req, res, function (err, some) {
         if (err) {
-        
+
             return res.status(500).json({ status: false, message: err.message });
 
         }

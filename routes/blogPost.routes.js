@@ -9,5 +9,6 @@ router.route('/createPost').post(s3Functions.userMediaUpload, blogFuncs.postBlog
 router.route('/fetchBlog').get(blogFuncs.fetchBlog);
 router.route('/createBlogTag').post(blogFuncs.createBlogTags);
 router.route('/fetchBlogTag').get(blogFuncs.fetchBlogTag);
+router.route('/fetchBlogById').get(blogFuncs.fetchParticularBlog);
 
 export default router;

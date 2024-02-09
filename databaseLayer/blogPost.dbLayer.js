@@ -74,8 +74,50 @@ const fetchBlog = async (params) => {
             { $count: "pageCount" }
         ])
         const resp = {};
-        resp.pageCount = pageCount[0]?.pageCount?pageCount[0]?.pageCount:0;
+        resp.pageCount = pageCount[0]?.pageCount ? pageCount[0]?.pageCount : 0;
         resp.feedData = fetchData
+        return { status: true, data: resp, message: "blog fetched successfully!" }
+    } catch (error) {
+        return { status: false, message: error.message }
+    }
+}
+const fetchParticularBlog = async (params) => {
+    try {
+        console.log(params)
+        let { _id } = params;
+        console.log(params)
+        let fetchData = await Models.blogsModel.aggregate([
+            {
+                $match: { _id: new mongoose.Types.ObjectId(_id) }
+            }, {
+                $lookup: {
+                    foreignField: "_id",
+                    localField: "tagsId",
+                    from: "tags",
+                    as: "tagsDetails",
+                    pipeline: [
+                        {
+                            $project: {
+                                tagName: 1
+                            }
+                        }
+                    ]
+                }
+            }
+            ,
+            {
+                $project: {
+                    title: 1,
+                    description: 1,
+                    imageURI: 1,
+                    tagsDetails: 1,
+                    createdAt: 1
+                }
+            }
+        ]);
+
+        const resp = {};
+        resp.feedData = fetchData;
         return { status: true, data: resp, message: "blog fetched successfully!" }
     } catch (error) {
         return { status: false, message: error.message }
@@ -115,6 +157,7 @@ const blogDbFuncs = {
     fetchBlog,
     createBlogTags,
     fetchBlogTags,
+    fetchParticularBlog
 
 }
 export default blogDbFuncs
